@@ -49,8 +49,7 @@ def on_off(on,off,labels):
     xlabel("frequency [Hz]")
     ylabel("E Field [dBuV/m]")
     title(labels)
-    figname = "/Temp/"+labels+".png"
-    savefig(figname)
+    savefig(labels)
 
 
 Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
@@ -63,7 +62,7 @@ filename_OFF = askopenfilename(title="Select Culprit OFF Data file")
 #Enter the Plot title:
 pltT="Enter title here....."
 
-on_off(filename_ON,filename_ON,pltT) 
+on_off(filename_ON,filename_OFF,pltT) 
 
 
 
