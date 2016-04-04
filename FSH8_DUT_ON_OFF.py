@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 def convert(dut,antennaF,lna):
 #    dut="/FSH Data/20160309_GEO_Equipment/asuslaptop.csv"
     data= np.genfromtxt(dut,delimiter=',',dtype=None)
-    freq=(data[46:-1,0]).astype(np.float)
-    dbm=(data[46:-1,1]).astype(np.float)
+    freq=(data[np.where(data[:,0]=="Freq. [Hz]")[0][0]+1:-1,0]).astype(np.float)
+    dbm=(data[np.where(data[:,0]=="Freq. [Hz]")[0][0]+1:-1,1]).astype(np.float)
     dbuV=dbm+107
     
 #    antennaF="/RFI Archive/Equipment_Database/Passive_Antennas/Antenna_MESA_KLPDA1.csv"
@@ -35,13 +35,13 @@ def convert(dut,antennaF,lna):
     dbuV_m=dbuV+af2-gg1
 #    figure()
 #    plot(freq,af2)
-    return freq, dbuV_m
+    return freq, dbuV_m, data
 
 
 
 def on_off(on,off,labels):
-    f1, e1=convert(on,filename,filename_lna)
-    f2, e2=convert(off,filename,filename_lna)
+    f1, e1, data1=convert(on,filename,filename_lna)
+    f2, e2, data2=convert(off,filename,filename_lna)
     diffe=e1-e2
     plt.figure()    
     plt.plot(f1,e1,label="DUT On")
@@ -57,7 +57,8 @@ def on_off(on,off,labels):
     plt.grid()
     plt.xlabel("frequency [Hz]")
     plt.ylabel("E Field difference [dBuV/m]")
-
+    plt.title("E Field Difference")
+    return data1
 
 Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
 filename = askopenfilename(title="Select Antenna Cal File") # show an "Open" dialog box and return the path to the selected file
@@ -69,7 +70,7 @@ filename_OFF = askopenfilename(title="Select Culprit OFF Data file")
 #Enter the Plot title:
 pltT="Enter title here....."
 
-on_off(filename_ON,filename_OFF,pltT) 
+data1=on_off(filename_ON,filename_OFF,pltT) 
 
 
 
